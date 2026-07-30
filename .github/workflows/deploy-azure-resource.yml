@@ -1,0 +1,26 @@
+name: Azure Bicep Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+
+          - name: Echo Script
+            run: echo Starting Bicep...
+
+          - name: Login with Azure
+            uses: azure/login@v1
+            with:
+              creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+          - name: Deploy the Bicep Script
+            uses: azure/arm-deploy@v1
+            with:
+              resourceGroupName: 'WebAppGroup'
+              template: azure-resources.bicep
+              scope: 'resource-group'
